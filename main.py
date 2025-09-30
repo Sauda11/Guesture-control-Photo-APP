@@ -2,8 +2,8 @@ import cv2
 import mediapipe as mp
 import time
 import numpy as np
-mp_hands = mp.soulutions.hands
-hands= mp_hands.Hands(min_dectection_confidence=0.7, min_tracking_confidence=0.7)
+mp_hands = mp.solutions.hands
+hands= mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7)
 mp_draw = mp.solutions.drawing_utils
 filters = [None, 'GRAYSCALE', 'SEPIA', 'NEGATIVE', 'BLUR' ]
 current_filter = 0
@@ -15,7 +15,7 @@ last_action_time = 0
 debounce_time = 1
 def apply_filter(frame, filter_type):
     if filter_type == 'GRAYSCALE':
-      return cv2.color(frame, cv2.COLOR_BGR2GRAY)
+      return cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     elif filter_type == 'SEPIA':
       sepia_filter = np.array([[0.272, 0.534, 0.131],
                               [0.349, 0.686, 0.168],
@@ -33,7 +33,7 @@ while True:
   if not success:
     print("Error: Could not read frame.")
     break
-  img = cv2.flip(img, 1)
+  img = cv2.flip(frame, 1)
   imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
   results = hands.process(imgRGB)
   if results.multi_hand_landmarks:
